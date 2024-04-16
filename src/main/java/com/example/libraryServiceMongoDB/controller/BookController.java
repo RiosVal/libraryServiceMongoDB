@@ -1,13 +1,15 @@
 package com.example.libraryServiceMongoDB.controller;
 
-import com.example.libraryServiceMongoDB.model.Book;
 import com.example.libraryServiceMongoDB.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.example.libraryServiceMongoDB.model.Book;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("book")
@@ -16,47 +18,45 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-    // 1. metodo de ejemplo para verbo GET
-    @GetMapping("/getAll")
-    public String getAll(){
-        return bookService.getAll();
+    @GetMapping("/findAll")
+    public ResponseEntity<List<Book>> findAllBooks(){
+        return ResponseEntity.ok(bookService.findAllBooks());
     }
 
-    // 2. metodo de ejemplo para verbo POST
-    @PostMapping("/insert")
-    public String insert(@RequestBody Book book){
-        return bookService.insert(book);
+    @PostMapping("/saveNewBook")
+    public ResponseEntity<Book> saveNewBook(@RequestBody Book book){
+        Book bookDB = bookService.saveBook(book);
+        return ResponseEntity.ok(bookDB);
     }
 
-    // 3. metodo de ejemplo para verbo UPDATE
-    @PutMapping("/update")
-    public String update(@RequestBody Book book){
-        return bookService.update(book);
+    @DeleteMapping("/deleteBook/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable String id){
+        return ResponseEntity.ok(bookService.deleteBook(id));
     }
 
-    // 4. metodo de ejemplo para verbo DELETE
-    @DeleteMapping("/delete/{id}")
-    public String deleteItem(@PathVariable("id") String id) {
-        return bookService.delete(id);
+    @PatchMapping("/updateBook")
+    public ResponseEntity<Book> updateBook(@RequestBody Book book){
+        return ResponseEntity.ok(bookService.updateBook(book));
     }
 
-    // 5. metodo de ejemplo para verbo PATH
-    @PatchMapping("/updateData/{id}")
-    public String updateData(@PathVariable String id, @RequestBody Book book){
-        return bookService.updateData(id, book);
+    @PutMapping("/updateStock")
+    public ResponseEntity<Book> updateStock(@RequestBody Book book){
+        return ResponseEntity.ok(bookService.updateStock(book));
     }
 
-    // 6. metodo de ejemplo para verbo HEAD
-    @RequestMapping(value = "/getAll", method = RequestMethod.HEAD)
-    public ResponseEntity<?> handleHeadRequest() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<>(headers, HttpStatus.OK);
+    @RequestMapping(value = "/headersBook/{id}")
+    public ResponseEntity<Object> headBook(@PathVariable String id){
+        return  ResponseEntity.ok(bookService.getHeaders(id));
     }
 
-    // 7. metodo de ejemplo para verbo OPTIONS
-    @RequestMapping(value = "/update", method = RequestMethod.OPTIONS)
-    public String optionsUpdate() {
-        return bookService.optionsUpdate();
+    @RequestMapping(value = "/options")
+    public ResponseEntity<?> options(){
+        return ResponseEntity.ok().allow(
+                HttpMethod.GET,
+                HttpMethod.POST,
+                HttpMethod.PUT,
+                HttpMethod.PATCH,
+                HttpMethod.DELETE
+        ).build();
     }
 }
