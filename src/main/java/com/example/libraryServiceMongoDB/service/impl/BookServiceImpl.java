@@ -78,7 +78,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Object getHeaders(String id) {
+    public HttpHeaders getHeaders(String id) {
         if (bookRepository.findById(id).isPresent()){
             HttpHeaders headers = new HttpHeaders();
             headers.add("Book", "Info");

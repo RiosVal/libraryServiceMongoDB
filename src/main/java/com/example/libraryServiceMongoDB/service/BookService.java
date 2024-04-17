@@ -1,6 +1,7 @@
 package com.example.libraryServiceMongoDB.service;
 
 import com.example.libraryServiceMongoDB.model.Book;
+import org.springframework.http.HttpHeaders;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface BookService {
     public Book updateStock(Book book);
 
     // HEAD
-    public Object getHeaders(String id);
+    public HttpHeaders getHeaders(String id);
 
     // OPTIONS
 

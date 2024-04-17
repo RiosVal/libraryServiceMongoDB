@@ -45,8 +45,8 @@ public class BookController {
     }
 
     @RequestMapping(value = "/headersBook/{id}")
-    public ResponseEntity<Object> headBook(@PathVariable String id){
-        return  ResponseEntity.ok(bookService.getHeaders(id));
+    public ResponseEntity<Void> headBook(@PathVariable String id){
+        return new ResponseEntity<>(bookService.getHeaders(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/options")
